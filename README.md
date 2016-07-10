@@ -1,2 +1,3 @@
-# bargraph
-Shows an in-browser bargraph which varies with microphone input.
+# Aria-Lumen
+Turn music into dancing leds
+
