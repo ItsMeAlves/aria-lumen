@@ -3,7 +3,7 @@ module.exports = function(http) {
         var io = require("socket.io")(http);
 
         io.on("connection", function(socket) {
-            console.log("hue");
+            console.log("Lumen, someone is connected!");
             io.emit("arduino", "placeholder");
         });
 

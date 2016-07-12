@@ -5,5 +5,17 @@ body, html {
     margin: 0;
     overflow: hidden;
     transition: all 0.1s;
+    background-color: black;
+    color: white;
+    text-align: center;
+    font-family: sans-serif;
+    display: table;
+}
+
+.title {
+    color: white;
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 300%;
 }
 
