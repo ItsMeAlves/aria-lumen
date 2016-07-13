@@ -3,12 +3,21 @@ const config = {
     audio: true
 };
 
-const fftSize = 64;
+const fftSize = 1024;
 const gain = 4;
 const boundaries = {
-    bass: 600,
-    mid: 2800,
-    treble: 6400   
+    bass: {
+        min: 0,
+        max: 700
+    },
+    mid: {
+        min: 700,
+        max: 3000
+    },
+    treble: {
+        min: 3000,
+        max: 6400
+    }   
 };
 
 const audio = new AudioContext();
@@ -16,20 +25,19 @@ navigator.getUserMedia = navigator.getUserMedia ||
                          navigator.webkitGetUserMedia ||
                          navigator.mozGetUserMedia;
 
+changeBackground(0,0,0);
+
 function volumeOf(array) {
     const acc = array.reduce((x,y) => {
-        return x * y;
+        return x + y;
     });
 
-    return Math.pow(acc, 1/array.length);
+    return parseInt(acc / array.length);
 }
 
 function changeBackground(r, g, b) {
-    var rgbString = "rgb(" + r + "," + g + "," + b + ")";
-    console.log(rgbString);
-    $("body").css({
-        "background-color": rgbString
-    });
+    var rgbString = "rgb(" + r + "," + g + "," + b + ")";  
+    document.querySelector("body").style.backgroundColor = rgbString;
 }
 
 function solve(arr, r, b) {
@@ -40,17 +48,23 @@ function solve(arr, r, b) {
 
     for(var band in b) {
         values[band] = [];
-    }
 
-    for(var band in values) {
-        while(current <= b[band]) {
+        while(current < b[band].min) {
+            current += r;
+            arrIndex += 1;
+        }
+
+        while(current <= b[band].max) {
             values[band][valueIndex] = arr[arrIndex];
             current += r;
             valueIndex += 1;
             arrIndex += 1;
         }
+        current = 0;
+        arrIndex = 0;
         valueIndex = 0;
     }
 
+    console.log(values);
     return values;
 }
