@@ -17,16 +17,18 @@ navigator.getUserMedia = navigator.getUserMedia ||
                          navigator.mozGetUserMedia;
 
 function volumeOf(array) {
-    const sum = array.reduce((x,y) => {
+    const acc = array.reduce((x,y) => {
         return x * y;
     });
 
-    return sum / array.length;
+    return Math.pow(acc, 1/array.length);
 }
 
 function changeBackground(r, g, b) {
+    var rgbString = "rgb(" + r + "," + g + "," + b + ")";
+    console.log(rgbString);
     $("body").css({
-        "background-color": "rgb(" + r + "," + g + "," + b + ")"
+        "background-color": rgbString
     });
 }
 

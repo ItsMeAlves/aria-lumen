@@ -15,22 +15,22 @@ function handle(stream) {
     const analyser = audio.createAnalyser();
 
     analyser.fftSize = fftSize;
-    analyser.minDecibels = -31;
-    analyser.maxDecibels = 224;
 
-    const resolution = (audio.sampleRate / 2) / (analyser.fftSize / 2);
+    const resolution = (audio.sampleRate / 2) / (analyser.fftSize);
     const bufferLength = analyser.frequencyBinCount;
-    const frequencies = new Uint8Array(bufferLength);
+    const data = new Uint8Array(bufferLength);
 
     function lumen() {
         id = requestAnimationFrame(lumen);
-        analyser.getByteFrequencyData(frequencies);
+        analyser.getByteFrequencyData(data);
+
+        var frequencies = data.map(k => k * gain);
 
         var volumes = {};
         var values = solve(frequencies, resolution, boundaries);
 
         for(var band in values) {
-            volumes[band] = (volumeOf(values[band]) + 31) * gain;
+            volumes[band] = (volumeOf(values[band]) + 31);
         } 
 
         changeBackground(volumes.bass, volumes.treble, volumes.mid);
