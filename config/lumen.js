@@ -1,53 +1,53 @@
-var ArduinoScanner = require("arduino-scanner");
-var SerialPort = require("serialport");
-var scanner = new ArduinoScanner();
-var port = null;
+var five = require("johnny-five");
+var board = null;
+var redPin = 8;
+var greenPin = 9;
+var bluePin = 10;
 
-function writeColors(c) {
-    var rgbString = c.red + "," + c.green + "," + c.blue;
-    port.write(rgbString, (err) => {
-    if(err) 
-        console.log("Lumen, we have a problem...");
+function writeColorsTo(socket, interface) {
+    socket.on("sample", (c) => {
+        interface.analogWrite(redPin, c.red);
+        interface.analogWrite(greenPin, c.green);
+        interface.analogWrite(bluePin, c.blue);
     });
 }
 
 module.exports = (io) => {
     io.on("connection", socket => {
         console.log("Aria, we have visitors!");
-        if(port != null) {
+        if(board != null && board.isReady) {
             io.emit("arise");
-            if(port.isOpen()) {
-                socket.on("sample", (c) => {
-                    writeColors(c);
-                });                
+            writeColorsTo(socket, board);
+        }
+        else {
+            if(board == null) {
+                board = new five.Board();
             }
-            else {
-                port.on("open", () => {
-                    socket.on("sample", (c) => {
-                        writeColors(c);
-                    });   
-                });
-            }
+            board.on("ready", () => {
+                io.emit("arise");
+                writeColorsTo(socket, board);                
+            });
+
+            board.on("error", () => {
+                process.exit(0);
+            });
         }
     });
 
-    scanner.start();
-    scanner.on("arduinoFound", result => {
-        scanner.stop();
+    // setTimeout(() => {l
+    //     io.emit("arise");
+    // }, 10000);
 
+    board = new five.Board({
+        repl: true
+    });
+    board.on("ready", () => {
         console.log("Aria, arise! Let Lumen handle this friendly arduino...");
         io.emit("arise");
-
-        port = new SerialPort(result.port);
-        port.on("open", () => {
-            io.use((socket, next) => {
-                socket.on("sample", (c) => {
-                   writeColors(c);
-                });
-
-                next();
-            });
-        });
+        
+    });
+    board.on("error", () => {
+        process.exit(0);
     });
 }
 
