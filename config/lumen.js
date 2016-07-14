@@ -3,13 +3,38 @@ var SerialPort = require("serialport");
 var scanner = new ArduinoScanner();
 var port = null;
 
+function writeColors(c) {
+    var rgbString = c.red + "," + c.green + "," + c.blue;
+    port.write(rgbString, (err) => {
+    if(err) 
+        console.log("Lumen, we have a problem...");
+    });
+}
+
 module.exports = (io) => {
     io.on("connection", socket => {
         console.log("Aria, we have visitors!");
         if(port != null) {
             io.emit("arise");
+            if(port.isOpen()) {
+                socket.on("sample", (c) => {
+                    writeColors(c);
+                });                
+            }
+            else {
+                port.on("open", () => {
+                    socket.on("sample", (c) => {
+                        writeColors(c);
+                    });   
+                });
+            }
         }
     });
+
+    setTimeout(() => {
+        console.log("arise!");
+        io.emit("arise");
+    }, 10000);
 
     scanner.start();
     scanner.on("arduinoFound", result => {
@@ -22,11 +47,7 @@ module.exports = (io) => {
         port.on("open", () => {
             io.use((socket, next) => {
                 socket.on("sample", (c) => {
-                    var rgbString = c.red + "," + c.green + "," + c.blue;
-                    port.write(rgbString, (err) => {
-                        if(err) 
-                            console.log("Lumen, we have a problem...");
-                    });
+                   writeColors(c);
                 });
 
                 next();

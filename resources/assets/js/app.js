@@ -32,9 +32,16 @@ function handle(stream) {
 
         for(var band in values) {
             volumes[band] = (volumeOf(values[band]));
-        } 
+        }
 
-        changeBackground(volumes.bass, volumes.mid, volumes.treble);
+        var colors = {
+            red: volumes.bass,
+            green: volumes.mid,
+            blue: volumes.treble
+        };
+
+        changeBackground(colors);
+        socket.emit("sample", colors);
     }
 
     input.connect(analyser);

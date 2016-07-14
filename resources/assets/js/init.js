@@ -25,8 +25,6 @@ navigator.getUserMedia = navigator.getUserMedia ||
                          navigator.webkitGetUserMedia ||
                          navigator.mozGetUserMedia;
 
-changeBackground(0,0,0);
-
 function volumeOf(array) {
     const acc = array.reduce((x,y) => {
         return x + y;
@@ -35,8 +33,9 @@ function volumeOf(array) {
     return parseInt(acc / array.length);
 }
 
-function changeBackground(r, g, b) {
-    var rgbString = "rgb(" + r + "," + g + "," + b + ")";  
+function changeBackground(colors) {
+    var rgbString = "rgb(" + colors.red + "," + colors.green + 
+        "," + colors.blue + ")";  
     document.querySelector("body").style.backgroundColor = rgbString;
 }
 
@@ -65,6 +64,5 @@ function solve(arr, r, b) {
         valueIndex = 0;
     }
 
-    console.log(values);
     return values;
 }
