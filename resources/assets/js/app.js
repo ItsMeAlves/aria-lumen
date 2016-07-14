@@ -1,5 +1,5 @@
 if(navigator.getUserMedia) {
-    socket.on("arduino", function(data) {
+    socket.on("arise", () => {
         document.querySelector(".title").textContent = "Uh, sounds great!";
         navigator.getUserMedia(config, handle, (error) => {
             console.log(error.message);
@@ -15,8 +15,9 @@ function handle(stream) {
     const analyser = audio.createAnalyser();
 
     analyser.fftSize = fftSize;
-
-    const resolution = (audio.sampleRate / 2) / (analyser.fftSize / 2);
+    // analyser.minDecibels = -50;
+    // analyser.maxDecibels = 205;
+    const resolution = (audio.sampleRate / 2) / (analyser.fftSize);
     const bufferLength = analyser.frequencyBinCount;
     const data = new Uint8Array(bufferLength);
 

@@ -4,19 +4,19 @@ const config = {
 };
 
 const fftSize = 1024;
-const gain = 4;
+const gain = 1;
 const boundaries = {
     bass: {
         min: 0,
-        max: 700
+        max: 600
     },
     mid: {
-        min: 700,
-        max: 3000
+        min: 600,
+        max: 2000
     },
     treble: {
-        min: 3000,
-        max: 6400
+        min: 2000,
+        max: 5500
     }   
 };
 
@@ -49,7 +49,7 @@ function solve(arr, r, b) {
     for(var band in b) {
         values[band] = [];
 
-        while(current < b[band].min) {
+        while(current <= b[band].min) {
             current += r;
             arrIndex += 1;
         }
