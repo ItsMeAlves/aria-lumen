@@ -1,11 +1,11 @@
-const config = {
+var config = {
     video: false,
     audio: true
 };
 
-const fftSize = 1024;
-const gain = 1;
-const boundaries = {
+var fftSize = 1024;
+var gain = 1;
+var boundaries = {
     bass: {
         min: 0,
         max: 600
@@ -20,13 +20,13 @@ const boundaries = {
     }   
 };
 
-const audio = new AudioContext();
+var audio = new AudioContext();
 navigator.getUserMedia = navigator.getUserMedia ||
                          navigator.webkitGetUserMedia ||
                          navigator.mozGetUserMedia;
 
 function volumeOf(array) {
-    const acc = array.reduce((x,y) => {
+    var acc = array.reduce((x,y) => {
         return x + y;
     });
 

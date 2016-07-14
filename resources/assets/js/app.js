@@ -11,15 +11,15 @@ else {
 }
 
 function handle(stream) {
-    const input = audio.createMediaStreamSource(stream);
-    const analyser = audio.createAnalyser();
+    var input = audio.createMediaStreamSource(stream);
+    var analyser = audio.createAnalyser();
 
     analyser.fftSize = fftSize;
     // analyser.minDecibels = -50;
     // analyser.maxDecibels = 205;
-    const resolution = (audio.sampleRate / 2) / (analyser.fftSize);
-    const bufferLength = analyser.frequencyBinCount;
-    const data = new Uint8Array(bufferLength);
+    var resolution = (audio.sampleRate / 2) / (analyser.fftSize);
+    var bufferLength = analyser.frequencyBinCount;
+    var data = new Uint8Array(bufferLength);
 
     function lumen() {
         setTimeout(lumen, 15);
