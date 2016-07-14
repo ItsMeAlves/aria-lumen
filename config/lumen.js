@@ -31,11 +31,6 @@ module.exports = (io) => {
         }
     });
 
-    setTimeout(() => {
-        console.log("arise!");
-        io.emit("arise");
-    }, 10000);
-
     scanner.start();
     scanner.on("arduinoFound", result => {
         scanner.stop();
