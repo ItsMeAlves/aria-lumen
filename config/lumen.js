@@ -2,7 +2,7 @@ var five = require("johnny-five");
 var board = null;
 var redPin = 8;
 var greenPin = 9;
-var bluePin = 10;
+var bluePin = 12;
 
 function writeColorsTo(socket, interface) {
     socket.on("sample", (c) => {
