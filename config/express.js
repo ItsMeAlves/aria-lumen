@@ -3,7 +3,7 @@ var app = express();
 var http = require("http").Server(app);
 var lumen = require("./lumen");
 
-app.set("view engine", "jade");
+app.set("view engine", "pug");
 app.set("views", "resources/views");
 app.set("PORT", process.env.PORT || 3000);
 
