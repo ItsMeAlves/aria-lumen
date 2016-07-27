@@ -1,5 +1,5 @@
 # Aria Lumen
-This project aims to create a nice audio visualisation using Web Audio API and, after that, control an arduino board attached to the computer. It's a very nice work to turn music into dancing leds!
+This project aims to create a nice audio visualisation using Web Audio API and, after that, control an arduino board attached to the computer and show its result at the background color. It's a very nice work to turn music into dancing leds!
 
 ## Using this
 Anyone can easily execute this by simply downloading and running inside its root directory:
