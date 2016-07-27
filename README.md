@@ -28,6 +28,8 @@ This is the browser part. When the server says it's okay to start listening (aft
 ## Lumen
 It lives inside the server, searching for an arduino board. When it's ready, it tells Aria that it's okay to start listening. So, it waits until Aria sends any sample, which means a simple combination of RGB. After that, it controls the arduino to power on three pins according to the sample received (by default: red pin is 8, green pin is 9, blue pin is 10).
 
+## Sample images
+
 ![Aria Sample](https://github.com/ItsMeAlves/aria-lumen/blob/master/images/sample2.png?raw=true)
 
 ![Aria Sample](https://github.com/ItsMeAlves/aria-lumen/blob/master/images/sample1.png?raw=true)
