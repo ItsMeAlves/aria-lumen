@@ -18,3 +18,13 @@ body, html {
     font-size: 300%;
 }
 
+.settings {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+}
+
+a, a:hover {
+    text-decoration: none;
+    color: white;
+}

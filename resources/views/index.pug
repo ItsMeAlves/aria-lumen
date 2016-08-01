@@ -3,10 +3,14 @@ html
     head
         title Aria
         meta(charset="utf-8")
+        meta(name="viewport" content="width=device-width")
         link(href="css/style.css" rel="stylesheet")
+        link(href="icons/material.css" rel="stylesheet")
         link(href="img/favicon.png" rel="icon")
     body
         h1.title Aria is waiting a friendly arduino...
+        a(href="#" class="settings") 
+            i.material-icons settings
         script(src="socket.io/socket.io.js")
         script.
             var socket = io();
