@@ -9,10 +9,13 @@ html
         link(href="img/favicon.png" rel="icon")
     body
         h1.title Aria is waiting a friendly arduino...
-        a(href="#" class="settings") 
+        a(href="#" class="settings-button") 
             i.material-icons settings
+        div.settings
+            h1 hue
         script(src="socket.io/socket.io.js")
         script.
             var socket = io();
         script(src="js/init.js")
+        script(src="js/settings.js")
         script(src="js/app.js")

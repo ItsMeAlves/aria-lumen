@@ -35,7 +35,7 @@ function volumeOf(array) {
 
 function changeBackground(colors) {
     var rgbString = "rgb(" + colors.red + "," + colors.green + 
-        "," + colors.blue + ")";  
+        "," + colors.blue + ")";
     document.querySelector("body").style.backgroundColor = rgbString;
 }
 
