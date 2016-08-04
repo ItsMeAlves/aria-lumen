@@ -3,6 +3,8 @@ var config = {
     audio: true
 };
 
+var pins = null;
+
 var fftSize = 1024;
 var gain = 1;
 var boundaries = {
@@ -66,3 +68,10 @@ function solve(arr, r, b) {
 
     return values;
 }
+
+socket.on("pins", defaultPins => {
+    pins = defaultPins;
+    document.querySelector(".redPin").placeholder = "Set a pin to control red (default is " + pins.redPin + ")";
+    document.querySelector(".greenPin").placeholder = "Set a pin to control green (default is " + pins.greenPin + ")";
+    document.querySelector(".bluePin").placeholder = "Set a pin to control blue (default is " + pins.bluePin + ")";
+});

@@ -4,57 +4,50 @@ var redPin = 8;
 var greenPin = 9;
 var bluePin = 10;
 
+function boardStatus() {
+    return {
+        ready: (board != null && board.isReady)
+    };
+}
+
 module.exports = (io) => {
     board = new five.Board({
         repl: true
     });
-    
+    board.on("ready", () => {
+        console.log("Good news, Lumen! There is an arduino!");
+        io.emit("boardStatus", boardStatus());
+        
+    });
+    board.on("error", () => {
+        process.exit(0);
+        io.emit("boardStatus", boardStatus());
+    });
+
     io.on("connection", socket => {
         console.log("Aria, we have visitors!");
-        if(board != null && board.isReady) {
-            io.emit("arise");
-            writeColorsTo(socket, board);
-        }
-        else {
-            if(board == null) {
-                board = new five.Board();
-            }
-            board.on("ready", () => {
-                io.emit("arise");
-                writeColorsTo(socket, board);                
-            });
+        socket.emit("pins", {
+            redPin: redPin,
+            greenPin: greenPin,
+            bluePin: bluePin
+        });
 
-            board.on("error", () => {
-                process.exit(0);
-            });
-        }
-    });
-    
-    io.use((socket, next) => {
+        socket.emit("boardStatus", boardStatus());
+
         socket.on("pins", (data) => {
             redPin = data.redPin;
             greenPin = data.greenPin;
             bluePin = data.bluePin
         });
 
-        socket.on("sample" (c) => {
-            if(board != null && board.isReady) {
+        socket.on("sample", (c) => {
+            if(boardStatus().ready) {
                 board.analogWrite(redPin, c.red);
                 board.analogWrite(greenPin, c.green);
                 board.analogWrite(bluePin, c.blue);
             }
         });
-    });
-
-
-    board.on("ready", () => {
-        console.log("Aria, arise! Let Lumen handle this friendly arduino...");
-        io.emit("arise");
-        
-    });
-    board.on("error", () => {
-        process.exit(0);
-    });
+    });    
 }
 
 

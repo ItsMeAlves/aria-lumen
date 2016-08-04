@@ -19,11 +19,6 @@ btn.addEventListener("click", (e) => {
 
 arduino.addEventListener("click", (e) => {
     e.preventDefault();
-    var pins = {
-        redPin: 8,
-        greenPin: 9,
-        bluePin: 10 
-    };
 
     for(var pin in pins) {
         let field = document.querySelector("." + pin);
