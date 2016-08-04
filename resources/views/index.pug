@@ -8,11 +8,19 @@ html
         link(href="icons/material.css" rel="stylesheet")
         link(href="img/favicon.png" rel="icon")
     body
-        h1.title Aria is waiting a friendly arduino...
+        h1.title Aria is waiting an arduino...
         a(href="#" class="settings-button") 
             i.material-icons settings
         div.settings.hidden
-            h1 hue
+            div.column 
+                h3 General settings
+            div.column
+                h3 Arduino settings
+                form.container
+                    input(type="number" class="redPin" placeholder="Set a pin to control red (default is 8)")
+                    input(type="number" class="greenPin" placeholder="Set a pin to control green (default is 9)")
+                    input(type="number" class="bluePin" placeholder="Set a pin to control blue (default is 10)")
+                    button(type="submit" id="arduino-settings") Set arduino configurations
         script(src="socket.io/socket.io.js")
         script.
             var socket = io();

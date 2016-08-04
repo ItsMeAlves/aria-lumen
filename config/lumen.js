@@ -2,17 +2,13 @@ var five = require("johnny-five");
 var board = null;
 var redPin = 8;
 var greenPin = 9;
-var bluePin = 12;
-
-function writeColorsTo(socket, interface) {
-    socket.on("sample", (c) => {
-        interface.analogWrite(redPin, c.red);
-        interface.analogWrite(greenPin, c.green);
-        interface.analogWrite(bluePin, c.blue);
-    });
-}
+var bluePin = 10;
 
 module.exports = (io) => {
+    board = new five.Board({
+        repl: true
+    });
+    
     io.on("connection", socket => {
         console.log("Aria, we have visitors!");
         if(board != null && board.isReady) {
@@ -33,14 +29,24 @@ module.exports = (io) => {
             });
         }
     });
+    
+    io.use((socket, next) => {
+        socket.on("pins", (data) => {
+            redPin = data.redPin;
+            greenPin = data.greenPin;
+            bluePin = data.bluePin
+        });
 
-    // setTimeout(() => {l
-    //     io.emit("arise");
-    // }, 10000);
-
-    board = new five.Board({
-        repl: true
+        socket.on("sample" (c) => {
+            if(board != null && board.isReady) {
+                board.analogWrite(redPin, c.red);
+                board.analogWrite(greenPin, c.green);
+                board.analogWrite(bluePin, c.blue);
+            }
+        });
     });
+
+
     board.on("ready", () => {
         console.log("Aria, arise! Let Lumen handle this friendly arduino...");
         io.emit("arise");

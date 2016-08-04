@@ -32,6 +32,7 @@ a, a:hover {
 .settings {
     height: 30%;
     background-color: white;
+    color: black;
     position: absolute;
     transition: all 0.3s ease-in-out;
     top: 70%;
@@ -42,4 +43,29 @@ a, a:hover {
 
 .settings.hidden {
     top: 100%;
+}
+
+.settings .column {
+    text-align: center;
+    margin-top: 0.5em;
+    width: 100%;
+    display: inline-block;
+    float: left;
+}
+
+@media(min-width: 700px) {
+    .settings .column {
+        width: 50%;
+    }
+}
+
+form input {
+    width: 100%;
+    margin-bottom: 0.3em;
+}
+
+.container {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
 }
