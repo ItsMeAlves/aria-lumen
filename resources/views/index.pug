@@ -12,7 +12,7 @@ html
         a(href="#" class="settings-button") 
             i.material-icons settings
         div.settings.hidden
-            div.column 
+            div 
                 h3 General settings
                 form.container
                     label(for="checkboxer") Wait for arduino?
@@ -20,7 +20,8 @@ html
                     input(type="radio" value="yes" name="wait-arduino" id="arduino-yes" checked)
                     label(for="arduino-no") No
                     input(type="radio" value="no" name="wait-arduino" id="arduino-no")
-            div.column
+                    button(type="submit" id="general-settings") Set general configurations
+            div
                 h3 Arduino settings
                 form.container
                     input(type="number" class="redPin" placeholder="Set a pin to control red (default is 8)")

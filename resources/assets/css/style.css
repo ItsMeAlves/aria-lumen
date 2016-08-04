@@ -30,33 +30,26 @@ a, a:hover {
 }
 
 .settings {
-    height: 30%;
+    height: 100%;
+    width: 85%;
     background-color: white;
     color: black;
     position: absolute;
     transition: all 0.3s ease-in-out;
-    top: 70%;
-    border-top: 10px solid #555;
-    left: 0;
-    right: 0;
-}
-
-.settings.hidden {
-    top: 100%;
-}
-
-.settings .column {
-    text-align: center;
-    margin-top: 0.5em;
-    width: 100%;
-    display: inline-block;
-    float: left;
+    top: 0;
+    border-right: 10px solid #555;
+    right: 15%;
 }
 
 @media(min-width: 700px) {
-    .settings .column {
-        width: 50%;
+    .settings {
+        width: 30%;
+        right: 70%;
     }
+}
+
+.settings.hidden {
+    right: 100%;
 }
 
 form input {
