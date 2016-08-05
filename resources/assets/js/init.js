@@ -3,8 +3,6 @@ var config = {
     audio: true
 };
 
-var pins = null;
-
 var fftSize = 1024;
 var gain = 1;
 var boundaries = {
@@ -22,17 +20,19 @@ var boundaries = {
     }   
 };
 
+var board = new Board();
+board.updateForm();
 var audio = new AudioContext();
 navigator.getUserMedia = navigator.getUserMedia ||
                          navigator.webkitGetUserMedia ||
                          navigator.mozGetUserMedia;
 
-function volumeOf(array) {
-    var acc = array.reduce((x,y) => {
+Array.prototype.volume = () => {
+    var acc = this.reduce((x,y) => {
         return x + y;
     });
 
-    return parseInt(acc / array.length);
+    return parseInt(acc / this.length);
 }
 
 function changeBackground(colors) {
@@ -69,9 +69,3 @@ function solve(arr, r, b) {
     return values;
 }
 
-socket.on("pins", defaultPins => {
-    pins = defaultPins;
-    document.querySelector(".redPin").placeholder = "Set a pin to control red (default is " + pins.redPin + ")";
-    document.querySelector(".greenPin").placeholder = "Set a pin to control green (default is " + pins.greenPin + ")";
-    document.querySelector(".bluePin").placeholder = "Set a pin to control blue (default is " + pins.bluePin + ")";
-});

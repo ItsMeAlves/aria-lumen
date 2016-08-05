@@ -1,8 +1,5 @@
 var five = require("johnny-five");
 var board = null;
-var redPin = 8;
-var greenPin = 9;
-var bluePin = 10;
 
 function boardStatus() {
     return {
@@ -26,25 +23,14 @@ module.exports = (io) => {
 
     io.on("connection", socket => {
         console.log("Aria, we have visitors!");
-        socket.emit("pins", {
-            redPin: redPin,
-            greenPin: greenPin,
-            bluePin: bluePin
-        });
 
         socket.emit("boardStatus", boardStatus());
 
-        socket.on("pins", (data) => {
-            redPin = data.redPin;
-            greenPin = data.greenPin;
-            bluePin = data.bluePin
-        });
-
         socket.on("sample", (c) => {
             if(boardStatus().ready) {
-                board.analogWrite(redPin, c.red);
-                board.analogWrite(greenPin, c.green);
-                board.analogWrite(bluePin, c.blue);
+                board.analogWrite(c.redPin, c.red);
+                board.analogWrite(c.greenPin, c.green);
+                board.analogWrite(c.bluePin, c.blue);
             }
         });
     });    

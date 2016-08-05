@@ -28,17 +28,20 @@ function handle(stream) {
         var values = solve(frequencies, resolution, boundaries);
 
         for(var band in values) {
-            volumes[band] = (volumeOf(values[band]));
+            volumes[band] = values[band].volume();
         }
 
-        var colors = {
+        var sample = {
             red: volumes.bass,
             green: volumes.mid,
-            blue: volumes.treble
+            blue: volumes.treble,
+            redPin: board.pins.redPin,
+            greenPin: board.pins.greenPin,
+            bluePin: board.pins.bluePin
         };
 
-        changeBackground(colors);
-        socket.emit("sample", colors);
+        changeBackground(sample);
+        socket.emit("sample", sample);
     }
 
     input.connect(analyser);

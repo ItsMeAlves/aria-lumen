@@ -19,18 +19,20 @@ btn.addEventListener("click", (e) => {
 
 arduino.addEventListener("click", (e) => {
     e.preventDefault();
-
-    for(var pin in pins) {
+    
+    for(var pin in board.pins) {
         let field = document.querySelector("." + pin);
-        let value = parseInt(field.value);
+        let input = field.value;
 
+        if(input == "") {
+            input = board.pins[pin];
+        }
+
+        let value = parseInt(input);
         if(!isNaN(value) && value > 0 && value < 14) {
-            pins[pin] = value;
+            board.pins[pin] = value;
         }
-        else {
-            field.value = pins[pin];
-        }
+        field.value = "";
     }
-
-    socket.emit("pins", pins);
+    board.updateForm();
 });
