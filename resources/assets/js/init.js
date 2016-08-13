@@ -8,7 +8,7 @@ var gain = 1;
 var boundaries = {
     bass: {
         min: 0,
-        max: 600
+        max:600
     },
     mid: {
         min: 600,
@@ -17,7 +17,7 @@ var boundaries = {
     treble: {
         min: 2000,
         max: 5500
-    }   
+    }
 };
 
 var board = new Board();
@@ -27,16 +27,16 @@ navigator.getUserMedia = navigator.getUserMedia ||
                          navigator.webkitGetUserMedia ||
                          navigator.mozGetUserMedia;
 
-Array.prototype.volume = () => {
-    var acc = this.reduce((x,y) => {
+function volumeOf(array) {
+    var acc = array.reduce((x,y) => {
         return x + y;
     });
 
-    return parseInt(acc / this.length);
+    return parseInt(acc / array.length);
 }
 
 function changeBackground(colors) {
-    var rgbString = "rgb(" + colors.red + "," + colors.green + 
+    var rgbString = "rgb(" + colors.red + "," + colors.green +
         "," + colors.blue + ")";
     document.querySelector("body").style.backgroundColor = rgbString;
 }
@@ -68,4 +68,3 @@ function solve(arr, r, b) {
 
     return values;
 }
-

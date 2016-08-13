@@ -28,13 +28,13 @@ function handle(stream) {
         var values = solve(frequencies, resolution, boundaries);
 
         for(var band in values) {
-            volumes[band] = values[band].volume();
+            volumes[band] = volumeOf(values[band]);
         }
 
         var sample = {
-            red: volumes.bass,
+            red: volumes.treble,
             green: volumes.mid,
-            blue: volumes.treble,
+            blue: volumes.bass,
             redPin: board.pins.redPin,
             greenPin: board.pins.greenPin,
             bluePin: board.pins.bluePin
@@ -47,5 +47,3 @@ function handle(stream) {
     input.connect(analyser);
     aria();
 }
-
-
