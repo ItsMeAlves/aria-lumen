@@ -5,6 +5,7 @@ var config = {
 
 var fftSize = 1024;
 var gain = 1;
+var discreteLevels = 32;
 var boundaries = {
     bass: {
         min: 0,
@@ -67,4 +68,26 @@ function solve(arr, r, b) {
     }
 
     return values;
+}
+
+function limit(input) {
+    var maxPwm = 256;
+    var volume = (input > (maxPwm - 1)) ? maxPwm - 1 : input;
+    return (volume < 0) ? 0 : volume;
+}
+
+function discreteValue(input) {
+    var volume = input;
+    var maxPwm = 256;
+    var step = maxPwm / discreteLevels;
+    var current = 0;
+
+    while(current <= maxPwm) {
+        if(volume >= current && volume < (current + step)) {
+            volume = current;
+            break;
+        }
+        current += step;
+    }
+    return volume;
 }

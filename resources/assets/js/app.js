@@ -32,12 +32,12 @@ function handle(stream) {
         }
 
         var sample = {
-            red: volumes.treble,
-            green: volumes.mid,
-            blue: volumes.bass,
+            red: limit(discreteValue(volumes.treble)),
+            green: limit(discreteValue(volumes.mid) - 70),
+            blue: limit(discreteValue(volumes.bass) - 70),
             redPin: board.pins.redPin,
             greenPin: board.pins.greenPin,
-            bluePin: board.pins.bluePin
+            bluePin: board.pins.bluePin,
         };
 
         changeBackground(sample);
