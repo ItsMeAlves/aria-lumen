@@ -5,12 +5,14 @@ function Board() {
         bluePin: 10
     };
     this.updateForm = () => {
-        document.querySelector(".redPin").placeholder = "Set pin to control red lights (default: " + 
+        document.querySelector(".redPin").placeholder = "Set pin to control red lights (default: " +
             this.pins.redPin + ")";
-        document.querySelector(".greenPin").placeholder = "Set pin to control green lights (default: " + 
+        document.querySelector(".greenPin").placeholder = "Set pin to control green lights (default: " +
             this.pins.greenPin + ")";
-        document.querySelector(".bluePin").placeholder = "Set pin to control blue lights (default: " + 
+        document.querySelector(".bluePin").placeholder = "Set pin to control blue lights (default: " +
             this.pins.bluePin + ")";
     }
 }
 
+var board = new Board();
+board.updateForm();

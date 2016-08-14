@@ -1,10 +1,6 @@
-var config = {
-    video: false,
-    audio: true
-};
-
-var fftSize = 1024;
 var gain = 1;
+var maxPwm = 256;
+var fftSize = 2048;
 var discreteLevels = 32;
 var boundaries = {
     bass: {
@@ -21,19 +17,12 @@ var boundaries = {
     }
 };
 
-var board = new Board();
-board.updateForm();
-var audio = new AudioContext();
-navigator.getUserMedia = navigator.getUserMedia ||
-                         navigator.webkitGetUserMedia ||
-                         navigator.mozGetUserMedia;
-
-function volumeOf(array) {
-    var acc = array.reduce((x,y) => {
+Array.prototype.average = function() {
+    var acc = this.reduce((x,y) => {
         return x + y;
     });
 
-    return parseInt(acc / array.length);
+    return parseInt(acc / this.length);
 }
 
 function changeBackground(colors) {
@@ -71,18 +60,18 @@ function solve(arr, r, b) {
 }
 
 function limit(input) {
-    var maxPwm = 256;
     var volume = (input > (maxPwm - 1)) ? maxPwm - 1 : input;
     return (volume < 0) ? 0 : volume;
 }
 
 function discreteValue(input) {
     var volume = input;
-    var maxPwm = 256;
-    var step = maxPwm / discreteLevels;
-    var current = 0;
+    var max = maxPwm;
+    var min = 0;
+    var step = (max - min) / discreteLevels;
+    var current = min;
 
-    while(current <= maxPwm) {
+    while(current <= max) {
         if(volume >= current && volume < (current + step)) {
             volume = current;
             break;
@@ -90,4 +79,9 @@ function discreteValue(input) {
         current += step;
     }
     return volume;
+}
+
+function mapper(x, in_min, in_max, out_min, out_max)
+{
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
