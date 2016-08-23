@@ -1,9 +1,16 @@
+/*
+ * Board - Define a Board constructor to handle board related data on client
+ */
+
 function Board() {
+    // Creates a pins attribute to save its values
     this.pins = {
         redPin: 8,
         greenPin: 9,
         bluePin: 10
     };
+
+    // Updates pin changing form based on its own pins
     this.updateForm = () => {
         document.querySelector(".redPin").placeholder = "Set pin to control red lights (default: " +
             this.pins.redPin + ")";
@@ -14,5 +21,6 @@ function Board() {
     }
 }
 
+// Creates an object
 var board = new Board();
 board.updateForm();

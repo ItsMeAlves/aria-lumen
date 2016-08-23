@@ -1,3 +1,7 @@
+/*
+ * Settings -  Control settings panel
+ */
+
 var btn = document.querySelector(".settings-button");
 var arduino = document.querySelector("#arduino-settings");
 var panel = document.querySelector(".settings");

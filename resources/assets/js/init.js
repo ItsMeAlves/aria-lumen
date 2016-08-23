@@ -1,7 +1,13 @@
-var gain = 1;
-var maxPwm = 256;
-var fftSize = 2048;
-var discreteLevels = 32;
+/*
+ * Init - File to define some variables and functions used by Aria
+ */
+
+var gain = 1;               // Define a gain factor to change Aria results
+var maxPwm = 256;           // maxPwm is used to limit each color power
+var fftSize = 2048;         // fftSize, to define each frequency interval
+var discreteLevels = 32;    // Define how many discrete levels will be considered
+
+// This object defines all frequency ranges we want
 var boundaries = {
     bass: {
         min: 0,
@@ -17,6 +23,7 @@ var boundaries = {
     }
 };
 
+// Calculates an average number of a given array
 Array.prototype.average = function() {
     var acc = this.reduce((x,y) => {
         return x + y;
@@ -25,12 +32,15 @@ Array.prototype.average = function() {
     return parseInt(acc / this.length);
 }
 
+// Updates background color
 function changeBackground(colors) {
     var rgbString = "rgb(" + colors.red + "," + colors.green +
         "," + colors.blue + ")";
     document.querySelector("body").style.backgroundColor = rgbString;
 }
 
+// Divides arr into smaller arrays
+// Each array returned represents the frequency band divided by boundaries size
 function solve(arr, r, b) {
     var current = 0;
     var arrIndex = 0;
@@ -59,11 +69,13 @@ function solve(arr, r, b) {
     return values;
 }
 
+// Limit an input value into a range between 0 and maxPwm
 function limit(input) {
     var volume = (input > (maxPwm - 1)) ? maxPwm - 1 : input;
     return (volume < 0) ? 0 : volume;
 }
 
+// Receives a value between 0 and 256 and translates it into a discrete level
 function discreteValue(input) {
     var volume = input;
     var max = maxPwm;
@@ -79,9 +91,4 @@ function discreteValue(input) {
         current += step;
     }
     return volume;
-}
-
-function mapper(x, in_min, in_max, out_min, out_max)
-{
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
