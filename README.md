@@ -13,15 +13,6 @@ Its results:
 
 This execution starts a server. Now, just simply open your browser and `locahost:3000` it.
 
-If you do NOT want to connect to an arduino board, you want Lumen to stay asleep and just Aria is needed. So, just tell it by doing:
-
-```
-node server.js --just-aria
-```
-With this flag, Lumen will not be started and Aria will not wait for an arduino board anymore. 
-
-![Startup without lumen](https://github.com/ItsMeAlves/aria-lumen/blob/master/images/without-lumen.png?raw=true)
-
 ## Aria
 This is the browser part. When the server says it's okay to start listening (after connectirng an arduino board through USB), Aria asks for permission to use the microphone. After that, it listen the audio stream and connect this to a analyser node, which provides a nice FFT implementation. Using this feature, it's possible to divide audio in frequency bands, allowing us to assign a band or a combination of them to a color. The default implementation tells the browser to change `<body>` background color property to a RGB value where R is the bass, G is the mid frequencies and B is all the treble. Finally, this result is continuously sent to Lumen.
 
