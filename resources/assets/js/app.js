@@ -7,6 +7,11 @@ var config = {
     video: false,
     audio: true
 };
+var lastVolumes = {
+    red: 0,
+    green: 0,
+    blue: 0
+};
 
 // Then, we require a AudioContext and the user media object
 // It will just work when served by a server
@@ -20,7 +25,7 @@ if(navigator.getUserMedia) {
     document.querySelector(".title").textContent = "Uh, sounds great!";
     // Requests user media by the config object created above
     // If everything runs fine, it will run audioFlow function passing a stream object
-    // But if something goes wrong, it will execute the last callback    
+    // But if something goes wrong, it will execute the last callback
     navigator.getUserMedia(config, audioFlow, (error) => {
         console.log(error.message);
     });
@@ -43,9 +48,8 @@ function audioFlow(stream) {
     var data = new Uint8Array(bufferLength);
 
     // Defines Aria
-    function aria() {
+    function aria(last) {
         // Calls Aria recursively after each 15ms
-        setTimeout(aria, 15);
 
         //Writes down in the data array the frequency values
         analyser.getByteFrequencyData(data);
@@ -64,9 +68,9 @@ function audioFlow(stream) {
 
         // Creates a sample data containing board pins and light intensity
         var sample = {
-            red: limit(volumes.treble),
-            green: limit(volumes.mid - 70),
-            blue: limit(volumes.bass - 70),
+            red: limit(volumes.treble - last.red),
+            green: limit(volumes.mid - 70 - last.green),
+            blue: limit(volumes.bass - 70 - last.blue),
             redPin: board.pins.redPin,
             greenPin: board.pins.greenPin,
             bluePin: board.pins.bluePin
@@ -76,10 +80,11 @@ function audioFlow(stream) {
         changeBackground(sample);
         // Emit sample event back to the server
         socket.emit("sample", sample);
+        setTimeout(aria, 15, sample);
     }
 
     // Connect the input audio to the AnalyserNode
     input.connect(analyser);
     // Calls Aria
-    aria();
+    aria(lastVolumes);
 }

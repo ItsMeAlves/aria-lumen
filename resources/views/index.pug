@@ -9,7 +9,7 @@ html
         link(href="img/favicon.png" rel="icon")
     body
         h1.title Aria is waiting an arduino...
-        a(href="#" class="settings-button") 
+        a(href="#" class="settings-button")
             i.material-icons settings
         div.settings.hidden
             form.container
@@ -26,7 +26,7 @@ html
                 input(type="number" class="greenPin")
                 input(type="number" class="bluePin")
                 button(type="submit" id="arduino-settings") Set arduino configurations
-        
+
         script(src="socket.io/socket.io.js")
         script.
             var socket = io();
