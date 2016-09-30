@@ -2,24 +2,24 @@
  * Init - File to define some variables and functions used by Aria
  */
 
-var gain = 1;               // Define a gain factor to change Aria results
+var gain = 2.5;               // Define a gain factor to change Aria results
 var maxPwm = 256;           // maxPwm is used to limit each color power
-var fftSize = 2048;         // fftSize, to define each frequency interval
+var fftSize = 512;         // fftSize, to define each frequency interval
 var discreteLevels = 32;    // Define how many discrete levels will be considered
 
 // This object defines all frequency ranges we want
 var boundaries = {
     bass: {
         min: 0,
-        max:600
+        max:800
     },
     mid: {
-        min: 600,
-        max: 2000
+        min: 800,
+        max: 1000
     },
     treble: {
-        min: 2000,
-        max: 5500
+        min: 1000,
+        max: 3000
     }
 };
 

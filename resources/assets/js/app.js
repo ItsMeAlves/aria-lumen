@@ -7,11 +7,6 @@ var config = {
     video: false,
     audio: true
 };
-var lastVolumes = {
-    red: 0,
-    green: 0,
-    blue: 0
-};
 
 // Then, we require a AudioContext and the user media object
 // It will just work when served by a server
@@ -48,8 +43,9 @@ function audioFlow(stream) {
     var data = new Uint8Array(bufferLength);
 
     // Defines Aria
-    function aria(last) {
+    function aria() {
         // Calls Aria recursively after each 15ms
+        setTimeout(aria, 15);
 
         //Writes down in the data array the frequency values
         analyser.getByteFrequencyData(data);
@@ -68,23 +64,24 @@ function audioFlow(stream) {
 
         // Creates a sample data containing board pins and light intensity
         var sample = {
-            red: limit(volumes.treble - last.red),
-            green: limit(volumes.mid - 70 - last.green),
-            blue: limit(volumes.bass - 70 - last.blue),
+            red: limit(volumes.treble),
+            green: limit(volumes.mid),
+            blue: limit(volumes.bass),
             redPin: board.pins.redPin,
             greenPin: board.pins.greenPin,
             bluePin: board.pins.bluePin
         };
 
+        console.log(sample.red, sample.green, sample.blue);
+
         // Change background by the given sample
         changeBackground(sample);
         // Emit sample event back to the server
         socket.emit("sample", sample);
-        setTimeout(aria, 15, sample);
     }
 
     // Connect the input audio to the AnalyserNode
     input.connect(analyser);
     // Calls Aria
-    aria(lastVolumes);
+    aria();
 }
