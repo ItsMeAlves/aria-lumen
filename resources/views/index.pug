@@ -8,29 +8,10 @@ html
         link(href="icons/material.css" rel="stylesheet")
         link(href="img/favicon.png" rel="icon")
     body
-        h1.title Aria is waiting an arduino...
-        a(href="#" class="settings-button")
-            i.material-icons settings
-        div.settings.hidden
-            form.container
-                h3 General settings
-                label(for="checkboxer") Wait for arduino?
-                label(for="arduino-yes") Yes
-                input(type="radio" value="yes" name="wait-arduino" id="arduino-yes" checked)
-                label(for="arduino-no") No
-                input(type="radio" value="no" name="wait-arduino" id="arduino-no")
-                button(type="submit" id="general-settings") Set general configurations
-            form.container
-                h3 Arduino settings
-                input(type="number" class="redPin")
-                input(type="number" class="greenPin")
-                input(type="number" class="bluePin")
-                button(type="submit" id="arduino-settings") Set arduino configurations
-
+        canvas#board
         script(src="socket.io/socket.io.js")
         script.
             var socket = io();
         script(src="js/board.js")
         script(src="js/init.js")
-        script(src="js/settings.js")
         script(src="js/app.js")

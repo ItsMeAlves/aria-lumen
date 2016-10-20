@@ -2,10 +2,12 @@
  * Init - File to define some variables and functions used by Aria
  */
 
-var gain = 2.5;               // Define a gain factor to change Aria results
+var lowGain = 40;               // Define a gain factor to change Aria results
+var midGain = 3;               // Define a gain factor to change Aria results
+var hiGain = 1;               // Define a gain factor to change Aria results
 var maxPwm = 256;           // maxPwm is used to limit each color power
 var fftSize = 512;         // fftSize, to define each frequency interval
-var discreteLevels = 32;    // Define how many discrete levels will be considered
+var discreteLevels = 8;    // Define how many discrete levels will be considered
 
 // This object defines all frequency ranges we want
 var boundaries = {
@@ -15,21 +17,34 @@ var boundaries = {
     },
     mid: {
         min: 800,
-        max: 1000
+        max: 1500
     },
     treble: {
-        min: 1000,
-        max: 3000
+        min: 1500,
+        max: 4000
     }
 };
 
 // Calculates an average number of a given array
 Array.prototype.average = function() {
+    // var filtered = this.filter((x) => {
+    //     return x != 0;
+    // });
+
+    // var result = 0;
+
+    // if(filtered.length > 0) {
+    //     var acc = filtered.reduce((x,y) => {
+    //         return x + y;
+    //     });
+    //     result = parseInt(acc / filtered.length);
+    // }
+
     var acc = this.reduce((x,y) => {
         return x + y;
     });
-
-    return parseInt(acc / this.length);
+    var result = parseInt(acc / this.length);
+    return result;
 }
 
 // Updates background color
@@ -72,7 +87,7 @@ function solve(arr, r, b) {
 // Limit an input value into a range between 0 and maxPwm
 function limit(input) {
     var volume = (input > (maxPwm - 1)) ? maxPwm - 1 : input;
-    return (volume < 0) ? 0 : volume;
+    return parseInt((volume < 0) ? 0 : volume);
 }
 
 // Receives a value between 0 and 256 and translates it into a discrete level
