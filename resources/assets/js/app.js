@@ -2,17 +2,17 @@
  * Client app file - Handles all data
  */
 
-var board = document.querySelector('#board');
-var boardContext = board.getContext("2d");
-board.setAttribute("height", window.innerHeight);
-board.setAttribute("width", window.innerWidth);
-
-
  // First we need to set what we want from user media. We just need audio
 var config = {
     video: false,
     audio: true
 };
+
+// Gets the canvas element
+var board = document.querySelector('#board');
+var boardContext = board.getContext("2d");
+board.setAttribute("height", window.innerHeight);
+board.setAttribute("width", window.innerWidth);
 
 // Then, we require a AudioContext and the user media object
 // It will just work when served by a server
@@ -39,40 +39,48 @@ else {
 // Gets all the stream data and calls Aria
 function audioFlow(stream) {
     // Create an audio input by the given stream and create an AnalyserNode
-    var input = audio.createMediaStreamSource(stream);
-    var lowAnalyser = audio.createAnalyser();
-    var midAnalyser = audio.createAnalyser();
-    var hiAnalyser = audio.createAnalyser();
-    var analyser = audio.createAnalyser();
-    var lowFilter = audio.createBiquadFilter();
-    var midFilter = audio.createBiquadFilter();
-    var hiFilter = audio.createBiquadFilter();
+    const input = audio.createMediaStreamSource(stream);
 
+    // Then creates three different filters
+    const lowFilter = audio.createBiquadFilter();
+    const midFilter = audio.createBiquadFilter();
+    const hiFilter = audio.createBiquadFilter();
+
+    // Four analysers, one for each filter and another for time domain analysis
+    const lowAnalyser = audio.createAnalyser();
+    const midAnalyser = audio.createAnalyser();
+    const hiAnalyser = audio.createAnalyser();
+    const analyser = audio.createAnalyser();
+
+    // Gets canvas measures
     const WIDTH = board.offsetWidth;
     const HEIGHT = board.offsetHeight;
 
+    // Setup for the lowpass filter to get the bass
     lowFilter.type = "lowpass",
     lowFilter.frequency.value = 1350;
     lowFilter.Q.value = 100;
     lowFilter.gain.value = 1;
 
+    // A bandpass filter to get mid frequencies
     midFilter.type = "bandpass",
     midFilter.frequency.value = 1800;
     midFilter.Q.value = 0.5;
     midFilter.gain.value = 1;
 
+    // And a high pass, for high notes
     hiFilter.type = "highpass",
     hiFilter.frequency.value = 2200;
     hiFilter.Q.value = 1000;
     hiFilter.gain.value = 1;
 
-    // Sets fftSize and calculates frequency resolution given by the analyser
+    // Sets fftSize for all analysers
     lowAnalyser.fftSize = fftSize;
     midAnalyser.fftSize = fftSize;
     hiAnalyser.fftSize = fftSize;
     analyser.fftSize = fftSize;
-    var resolution = (audio.sampleRate / 2) / (hiAnalyser.fftSize);
 
+    // Creates arrays to hold data for all of analysers
     var lowBufferLength = lowAnalyser.frequencyBinCount;
     var midBufferLength = midAnalyser.frequencyBinCount;
     var hiBufferLength = hiAnalyser.frequencyBinCount;
@@ -82,7 +90,9 @@ function audioFlow(stream) {
     var hiData = new Uint8Array(hiBufferLength);
     var dataArray = new Uint8Array(bufferLength);
 
+    // Change background color and draws a time domain waveform
     function drawWaveform(color) {
+        // Gets time domain data and sets line aspects
         analyser.getByteTimeDomainData(dataArray);
         boardContext.fillStyle = color;
         boardContext.fillRect(0, 0, WIDTH, HEIGHT);
@@ -91,6 +101,8 @@ function audioFlow(stream) {
 
         boardContext.beginPath();
 
+        // Calculates where line should start
+        // Also, draws the rest of it
         var sliceWidth = WIDTH * 1.0 / bufferLength;
         var x = 0;
         for(var i = 0; i < bufferLength; i++) {
@@ -108,6 +120,7 @@ function audioFlow(stream) {
             x += sliceWidth;
         }
 
+        // Set the line inside to the canvas
         boardContext.lineTo(board.width, board.height/2);
         boardContext.stroke();
     };
@@ -115,31 +128,30 @@ function audioFlow(stream) {
 
     // Defines Aria
     function aria() {
-        // Calls Aria recursively after each 15ms
+        // Calls Aria recursively after each 16ms
         setTimeout(aria, 16);
 
-        //Writes down in the data array the frequency values
+        //Writes down in the data array the frequency values for each band
         lowAnalyser.getByteFrequencyData(lowData);
         midAnalyser.getByteFrequencyData(midData);
         hiAnalyser.getByteFrequencyData(hiData);
 
-        // Define a new frequencies array after applying gain
+        // Define the new frequencies arrays after applying gain
         var lowFrequencies = Array.from(lowData.map(k => k * lowGain));
         var midFrequencies = Array.from(midData.map(k => k * midGain));
         var hiFrequencies = Array.from(hiData.map(k => k * hiGain));
 
-        // Creates a sample data containing board pins and light intensity
+        // Creates a sample data containing light intensity
         var sample = {
             red: discreteValue(hiFrequencies.average()),
             green: discreteValue(midFrequencies.average()),
             blue: discreteValue(lowFrequencies.average()),
         };
 
-        console.log(sample.red, sample.green, sample.blue);
-
-        // Change background by the given sample
+        // Change background by the given sample and draws a time domain waveform
         drawWaveform("rgb(" + sample.red + "," +
             sample.green + "," + sample.blue + ")");
+
         // Emit sample event back to the server
         socket.emit("sample", sample);
     }
@@ -147,10 +159,10 @@ function audioFlow(stream) {
 
     // Connect the input audio to the AnalyserNode
     input.connect(lowFilter);
-    lowFilter.connect(lowAnalyser);
     input.connect(midFilter);
-    midFilter.connect(midAnalyser);
     input.connect(hiFilter);
+    lowFilter.connect(lowAnalyser);
+    midFilter.connect(midAnalyser);
     hiFilter.connect(hiAnalyser);
     input.connect(analyser);
 
